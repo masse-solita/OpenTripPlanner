@@ -21,5 +21,11 @@ jobs:
             -e TARGET_URL="${TARGET_URL}" \
             -e SUBSCRIPTION_KEY="${SUBSCRIPTION_KEY}" \
             -t zaproxy/zap-stable \
-            zap.sh -cmd -autorun /zap/wrk/security/zap.yml \
-            > /dev/null 2>&1
+            zap.sh -cmd -autorun /zap/wrk/security/zap.yml
+
+      - name: Upload ZAP Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap-report.html
