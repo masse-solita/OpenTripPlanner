@@ -65,6 +65,7 @@ jobs:
     name: "GraphQL Spider"
     parameters:
       endpoint: "${TARGET_URL}"
+      schemaFile: "/zap/wrk/application/src/main/resources/org/opentripplanner/apis/gtfs/schema.graphqls"
       maxQueryDepth: 1
       maxArgsDepth: 1
       maxCycleDetectionAlerts: 10
