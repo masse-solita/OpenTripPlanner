@@ -1,0 +1,29 @@
+name: DAST - ZAP Security Scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: "Target API URL"
+        required: true
+
+jobs:
+  zap-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run ZAP Scan
+        env:
+          TARGET_URL: ${{ inputs.target_url }}
+          SUBSCRIPTION_KEY: ${{ secrets.DIGITRANSIT_SUBSCRIPTION_KEY }}
+        run: |
+          chmod -R 777 ./
+          docker run \
+            -v "$(pwd):/zap/wrk/:rw" \
+            -e TARGET_URL="${TARGET_URL}" \
+            -e SUBSCRIPTION_KEY="${SUBSCRIPTION_KEY}" \
+            -t zaproxy/zap-stable \
+            zap.sh -cmd -autorun /zap/wrk/security/zap.yml \
+            > /dev/null 2>&1
