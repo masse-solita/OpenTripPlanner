@@ -24,9 +24,19 @@ jobs:
             zap.sh -cmd -autorun /zap/wrk/security/zap.yml \
             > /dev/null 2>&1
 
-      - name: Upload ZAP Report
+      - name: Encrypt and upload ZAP Report
+        if: always()
+        env:
+          REPORT_PASSPHRASE: ${{ secrets.ZAP_REPORT_PASSPHRASE }}
+        run: |
+          openssl enc -aes-256-cbc -pbkdf2 \
+            -in zap-report.html \
+            -out zap-report.html.enc \
+            -pass pass:"${REPORT_PASSPHRASE}"
+
+      - name: Upload encrypted ZAP Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: zap-report.html
+          path: zap-report.html.enc
