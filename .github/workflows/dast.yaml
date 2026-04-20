@@ -21,7 +21,8 @@ jobs:
             -e TARGET_URL="${TARGET_URL}" \
             -e SUBSCRIPTION_KEY="${SUBSCRIPTION_KEY}" \
             -t zaproxy/zap-stable \
-            zap.sh -cmd -autorun /zap/wrk/security/zap.yml
+            zap.sh -cmd -autorun /zap/wrk/security/zap.yml \
+            > /dev/null 2>&1
 
       - name: Upload ZAP Report
         if: always()
